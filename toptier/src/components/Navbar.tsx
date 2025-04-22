@@ -2,6 +2,7 @@
 
 import React from "react";
 import Logo from "./Logo";
+import SearchField from "./SearchField";
 import NavButtons from "./NavButtons";
 
 interface NavbarProps {
@@ -9,32 +10,24 @@ interface NavbarProps {
 }
 
 function Navbar(props: NavbarProps) {
-  
-  const user = "";
-
   return (
-    <nav className="w-full bg-[#0C0F11]">
-      <div className="flex items-center justify-between p-6 mx-auto my-0 max-w-[1200px] max-md:p-5 max-sm:p-4">
-        {/* Left: Logo */}
+    <nav className="w-full bg-[#0C0F11] border-b-2 border-solid border-[#D4AF37]">
+      <div className="flex justify-between items-center p-6 mx-auto my-0 max-w-[1200px] max-md:p-5 max-sm:p-4">
         <div className="flex-none">
           <Logo />
         </div>
-        <h1 className="flex-none text-4xl md:text-5xl font-bold text-center ml-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-center ml-4">
           <span className="text-[#D4AF37]">TopTier</span>
         </h1>
 
-        {/* Center: Welcome message */}
         {props.isLoggedIn && (
-          <div className="flex-1 flex justify-center">
-            <p className="text-2xl md:text-2xl font-bold text-center text-white">
-              Welcome, {user}
-            </p>
+          <div className="flex-1 flex justify-center px-4">
+            <SearchField />
           </div>
         )}
 
-        {/* Right: NavButtons */}
         <div className="flex-none">
-          <NavButtons isLoggedIn={props.isLoggedIn} />
+          <NavButtons isLoggedIn={props.isLoggedIn}/>
         </div>
       </div>
     </nav>

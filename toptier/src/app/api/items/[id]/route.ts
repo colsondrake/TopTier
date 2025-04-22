@@ -1,5 +1,6 @@
 import connectMongoDB from "../../../../../config/mongodb";
 import Item from "@/models/itemSchema";
+import { verifyToken } from "@/lib/verifyToken";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import mongoose from "mongoose";
@@ -18,32 +19,89 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 // PUT function to update items
-export async function PUT(request: NextRequest, { params }: RouteParams) {
-    const { id } = await params;
-    const { userIdentification: userIdentification, game: game, winCount: winCount } = await request.json();
+export async function PUT(request: NextRequest, context: { params: { id: string } }) {
+    const { id } = context.params;
+  
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ message: "Invalid ID format" }, { status: 400 });
+    }
+
+    const authHeader = request.headers.get("Authorization");
+    const token = authHeader?.split(" ")[1];
+  
+    if (!token) {
+      return NextResponse.json({ message: "Missing token" }, { status: 401 });
+    }
+  
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      return NextResponse.json({ message: "Invalid or expired token" }, { status: 401 });
+    }
+  
+    const { userId } = decoded as { userId: string };
+  
+    const { game, winCount } = await request.json();
+  
     await connectMongoDB();
-    await Item.findByIdAndUpdate(id, { userIdentification, game, winCount });
+  
+    const item = await Item.findById(id);
+
+    if (!item) {
+      return NextResponse.json({ message: "Item not found" }, { status: 404 });
+    }
+  
+    if (item.userIdentification.toString() !== userId) {
+      return NextResponse.json({ message: "Forbidden: You don't own this item" }, { status: 403 });
+    }
+  
+    item.game = game;
+    item.winCount = winCount;
+    await item.save();
+  
     return NextResponse.json({ message: "Item updated" }, { status: 200 });
-}
+  }
+  
 
 // DELETE function to delete items
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
-    const { id } = await params;
-
-    // Ensure the item id is valid
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    try {
+      const { id } = params;
+  
+      if (!mongoose.Types.ObjectId.isValid(id)) {
         return NextResponse.json({ message: "Invalid ID format" }, { status: 400 });
-    }
-
-    // Attempt to delete the item
-    await connectMongoDB();
-    const deletedItem = await Item.findByIdAndDelete(id);
-
-    // Print error message if the delete failed
-    if (!deletedItem) {
+      }
+  
+      const authHeader = request.headers.get("Authorization");
+      const token = authHeader?.split(" ")[1];
+  
+      if (!token) {
+        return NextResponse.json({ message: "Missing token" }, { status: 401 });
+      }
+  
+      const decoded = verifyToken(token);
+      if (!decoded) {
+        return NextResponse.json({ message: "Invalid or expired token" }, { status: 401 });
+      }
+  
+      const { userId } = decoded as { userId: string };
+  
+      await connectMongoDB();
+      const item = await Item.findById(id);
+  
+      if (!item) {
         return NextResponse.json({ message: "Item not found" }, { status: 404 });
+      }
+  
+      if (item.userIdentification.toString() !== userId) {
+        return NextResponse.json({ message: "Forbidden: You don't own this item" }, { status: 403 });
+      }
+  
+      await item.deleteOne();
+  
+      return NextResponse.json({ message: "Item deleted" }, { status: 200 });
+  
+    } catch (error: any) {
+      console.error("DELETE error:", error.message);
+      return NextResponse.json({ message: "Internal Server Error", error: error.message }, { status: 500 });
     }
-
-    // Print successful delete message
-    return NextResponse.json({ message: "Item deleted" }, { status: 200 });
-}
+  }

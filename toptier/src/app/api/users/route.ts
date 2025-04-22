@@ -2,18 +2,35 @@ import connectMongoDB from "../../../../config/mongodb";
 import User from "@/models/userSchema";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
+import jwt from "jsonwebtoken";
 
-// GET function to return items
+const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey"; // Use env var in prod
+
 export async function GET() {
-    await connectMongoDB();
-    const users = await User.find();
-    return NextResponse.json({ users });
+  await connectMongoDB();
+  const users = await User.find();
+  return NextResponse.json({ users });
 }
 
-// POST function to create and add a new item to the items database (scores)
 export async function POST(request: NextRequest) {
-    const { username, password } = await request.json();
-    await connectMongoDB();
-    await User.create({ username, password });
-    return NextResponse.json({ message: "Item added successfully" }, { status: 201 });
+  const { username, password } = await request.json();
+  await connectMongoDB();
+
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    return NextResponse.json({ message: "Username already taken" }, { status: 400 });
+  }
+
+  const newUser = await User.create({ username, password });
+
+  const token = jwt.sign(
+    { userId: newUser._id, username: newUser.username },
+    JWT_SECRET,
+    { expiresIn: "1h" }
+  );
+
+  return NextResponse.json(
+    { message: "User registered successfully", token },
+    { status: 201 }
+  );
 }

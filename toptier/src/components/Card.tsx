@@ -6,7 +6,7 @@ interface CardProps {
   // a Card wrapper component
   const Card = ({ children, className = "" }: CardProps) => {
     return (
-      <div className={`border border-[#D4AF37] shadow-sm rounded-lg p-4 ${className}`}>
+      <div className={`border border-gray-300 shadow-sm rounded-lg p-4 bg-white ${className}`}>
         {children}
       </div>
     );

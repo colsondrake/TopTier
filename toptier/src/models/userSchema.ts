@@ -2,12 +2,16 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 
 // Create the interface for user
 interface IUser extends Document {
+    id: number;
     username: string;
     password: string;
 }
 
 // User schema to hold data members in a user
 const userSchema = new Schema<IUser>({
+    id: { // This will be the user's id
+        type: Number,
+    },
     username: {
         type: String,
         required: true,

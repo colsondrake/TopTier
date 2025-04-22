@@ -10,7 +10,7 @@ export const ScoreCardContent: React.FC<ScoreCardContentProps> = ({
   description,
 }) => {
   return (
-    <div className="w-full max-md:max-w-full mt-8">
+    <div className="w-full max-md:max-w-full">
       <h2 className="text-2xl font-semibold tracking-tight leading-tight text-stone-900 max-md:max-w-full">
         {title}
       </h2>

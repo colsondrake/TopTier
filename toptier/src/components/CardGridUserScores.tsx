@@ -1,15 +1,14 @@
-"use client";
-
-import React from "react";
-import ScoreCard from "./ScoreCard";
-import fortnitepic from "@/assets/fortnite.png";
-import warzonepic from "@/assets/warzone.png";
-import wordlepic from "@/assets/wordle.png";
-import Link from "next/link";
+'use client';
+import * as React from 'react';
+import { ScoreCard } from './ScoreCard';
+import fortnitepic from '@/assets/fortnite.png';
+import warzonepic from '@/assets/warzone.png';
+import wordlepic from '@/assets/wordle.png';
+import Link from 'next/link';
+import { Score } from "@/components/CardGridContentList";
 import { CardGridContentListProps } from "@/components/CardGridContentList";
 
 function CardGridUserScores({
-
   scores = [
     {
       id: 1,
@@ -31,36 +30,25 @@ function CardGridUserScores({
     },
   ],
 }: CardGridContentListProps) {
-  function editScore() {
-
-  }
-  function deleteScore() {
-
-  }
-
   return (
-    <div className="p-16 bg-[#0C0F11] max-md:px-5">
+    <div className="p-16 bg-[#0C0F11] max-md:px-5 border-2 border-[#D4AF37]">
 
       {/* header section */}
-      <div className="flex items-center justify-between px-10">
+      <div className="flex px-10 space-in-between">
         <header className="max-w-full leading-tight w-[239px]">
           <h1 className="text-5xl font-bold tracking-tight text-[#D4AF37]">
             James Casey
           </h1>
           <p className="mt-2 text-xl text-[#D4AF37]">Your Top Scores!</p>
         </header>
-        <div className="flex gap-4">
-          <Link href="/add-item" className="mr-10">
-            <button 
-              className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-full shadow hover:bg-yellow-300 transition duration-300"
-              onClick={editScore}>
+        <div className="">
+          <Link href="/add-item"className="mr-10">
+            <button className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-full shadow hover:bg-yellow-300 transition duration-300">
               Add New Score
             </button>
           </Link>
           <Link href="/auth-view">
-            <button 
-              className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-full shadow hover:bg-yellow-300 transition duration-300"
-              onClick={deleteScore}>
+            <button className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-full shadow hover:bg-yellow-300 transition duration-300">
               Back to Home
             </button>
           </Link>
@@ -74,7 +62,6 @@ function CardGridUserScores({
               imageUrl={score.imageUrl}
               title={score.title}
               description={score.description}
-              isUser={true}
             />
           </div>
         ))}
