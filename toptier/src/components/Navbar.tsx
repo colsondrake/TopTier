@@ -4,12 +4,14 @@ import React from "react";
 import Logo from "./Logo";
 import SearchField from "./SearchField";
 import NavButtons from "./NavButtons";
+import { useRouter } from 'next/navigation';
 
 interface NavbarProps {
   isLoggedIn: boolean;
 }
 
 function Navbar(props: NavbarProps) {
+  const router = useRouter();
   return (
     <nav className="w-full bg-[#0C0F11] border-b-2 border-solid border-[#D4AF37]">
       <div className="flex justify-between items-center p-6 mx-auto my-0 max-w-[1200px] max-md:p-5 max-sm:p-4">
@@ -27,7 +29,7 @@ function Navbar(props: NavbarProps) {
         )}
 
         <div className="flex-none">
-          <NavButtons isLoggedIn={props.isLoggedIn}/>
+          <NavButtons isLoggedIn={props.isLoggedIn} />
         </div>
       </div>
     </nav>

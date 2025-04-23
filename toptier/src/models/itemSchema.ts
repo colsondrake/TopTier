@@ -2,22 +2,22 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 
 // Create the interface for item
 interface IItem extends Document {
-    owner: number;
+    userIdentification: string;
     game: string;
-    wins: number;
+    winCount: string;
 }
 
 // Item schema to hold data members in an item
 const itemSchema = new Schema<IItem>({
-    owner: { // This will be the user's id
-        type: Number,
+    userIdentification: { 
+        type: String,
     },
     game: {
         type: String,
         required: true,
     },
-    wins: {
-        type: Number,
+    winCount: {
+        type: String,
         required: true,
     },
 });

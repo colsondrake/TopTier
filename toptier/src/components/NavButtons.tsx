@@ -5,6 +5,10 @@ interface NavButtonsProps {
   isLoggedIn: boolean;
 }
 
+const handleClick = () => {
+  localStorage.removeItem('token');
+}
+
 function NavButtons(props: NavButtonsProps) {
 
   return (
@@ -30,7 +34,7 @@ function NavButtons(props: NavButtonsProps) {
       {props.isLoggedIn && (
         <div className="flex gap-3 items-center max-md:gap-2 max-sm:ml-auto">
           <Link href="/welcome">
-            <button 
+            <button onClick={handleClick}
               className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-full shadow hover:bg-yellow-300 transition duration-300">
               Logout
             </button>
