@@ -1,6 +1,8 @@
 # TopTier
 
-### Contributors: Jake Caruana, Gowri Shamsundar, Noah Nielsen, Colson Drake
+# CSCI 4300 Final Project
+
+### Contributors: Gowri Shamsundar, Jake Caruana, Noah Nielsen, Colson Drake
 
 ### Project Description:
 
